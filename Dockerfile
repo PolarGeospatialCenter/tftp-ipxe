@@ -6,7 +6,6 @@ WORKDIR /usr/local/src/
 RUN git clone git://git.ipxe.org/ipxe.git
 
 WORKDIR /usr/local/src/ipxe/src/
-COPY ca.crt /certs/ca.crt
 COPY embed /embed/
 RUN make -j4 bin/undionly.kpxe EMBED=/embed/localchain.ipxe
 
