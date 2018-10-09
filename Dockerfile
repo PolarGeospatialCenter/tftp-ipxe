@@ -1,4 +1,4 @@
-FROM alpine
+FROM alpine as ipxe
 
 RUN apk add --no-cache gcc binutils make perl xz-dev mtools cdrkit syslinux git musl-dev bash openssl coreutils
 
@@ -10,11 +10,10 @@ COPY embed /embed/
 RUN make -j4 bin/undionly.kpxe EMBED=/embed/localchain.ipxe
 
 
-FROM alpine
+FROM busybox
 
-RUN apk add --no-cache tftp-hpa
 COPY scripts/start.sh /bin/start.sh
 COPY templates/ /templates/
 RUN chmod a+x /bin/start.sh
-COPY --from=0 /usr/local/src/ipxe/src/bin/undionly.kpxe /srv/tftp/undionly.kpxe
+COPY --from=ipxe /usr/local/src/ipxe/src/bin/undionly.kpxe /srv/tftp/undionly.kpxe
 CMD /bin/start.sh
