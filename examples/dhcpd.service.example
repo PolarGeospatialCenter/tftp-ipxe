@@ -1,0 +1,20 @@
+[Unit]
+Description=TFTP Daemon
+After=docker.service
+Requires=docker.service
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+TimeoutStartSec=0
+Restart=always
+ExecStartPre=-/usr/bin/docker stop tftpd
+ExecStartPre=-/usr/bin/docker rm tftpd
+ExecStartPre=/usr/bin/docker pull quay.io/polargeospatialcenter/tftpd:latest
+ExecStart=/usr/bin/docker run --name tftpd --rm \
+  --net=host \
+  -e IPXE_URL=http://${next-server}/ipxe?mac=${mac} \
+  quay.io/polargeospatialcenter/tftpd:latest
+
+[Install]
+WantedBy=multi-user.target

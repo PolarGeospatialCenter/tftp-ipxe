@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dhcpd
+spec:
+  hostnetwork: true
+  containers:
+    - name: dhcpd
+      image: quay.io/polargeospatialcenter/dhcpd:latest
+      ports:
+        - name: dhcpc
+          containerPort: 67
+          protocol: UDP
+      env:
+        - name: DHCPD_NETWORK
+          value: 192.0.2.0
+        - name: DHCPD_NETMASK
+          value: 255.255.255.0
+        - name: DHCPD_GATEWAY
+          value: 192.0.2.1
+        - name: DHCPD_DNS
+          value: 8.8.8.8
+        - name: DHCPD_RANGE_BEGIN
+          value: 192.0.2.10
+        - name: DHCPD_RANGE_END
+          value: 192.0.2.100
