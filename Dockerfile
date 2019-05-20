@@ -10,7 +10,9 @@ COPY embed /embed/
 RUN make -j4 bin/undionly.kpxe EMBED=/embed/localchain.ipxe
 
 
-FROM busybox
+FROM alpine
+
+RUN apk --no-cache add tftp-hpa
 
 COPY scripts/start.sh /bin/start.sh
 COPY templates/ /templates/
