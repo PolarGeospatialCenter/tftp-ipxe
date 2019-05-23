@@ -7,7 +7,8 @@ RUN git clone git://git.ipxe.org/ipxe.git
 
 WORKDIR /usr/local/src/ipxe/src/
 COPY embed /embed/
-RUN make -j4 bin/undionly.kpxe EMBED=/embed/localchain.ipxe
+RUN sed -i 's@^//#define CONSOLE_CMD@#define CONSOLE_CMD@g' config/general.h && \ 
+    make -j4 bin/undionly.kpxe EMBED=/embed/localchain.ipxe
 
 
 FROM alpine
